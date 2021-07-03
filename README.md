@@ -1,6 +1,6 @@
 # chartist-plugin-legendTitle
 
-Plugin to create Chartist legend. 
+Plugin to create Chartist legend.
 
 ## Available Options
 
@@ -49,5 +49,5 @@ Here the example:
         };
 
         new Chartist.Line('.ct-chart', data, options);
-    </script>
+</script>
 ```
