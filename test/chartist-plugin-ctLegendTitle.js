@@ -115,50 +115,110 @@
 
           var addBoxStyle = document.createElement('style');
           addBoxStyle.innerHTML = `
-          .ct-legend-box.ct-series-a {
-            background-color: #d70206;
+          .ct-series-a .ct-point,
+          .ct-series-a .ct-line,
+          .ct-series-a .ct-bar,
+          .ct-series-a .ct-slice-donut {
+              background-color: #d70206;
           }
-          .ct-legend-box.ct-series-b {
-            background-color: #f05b4f;
+          
+          .ct-series-b .ct-point,
+          .ct-series-b .ct-line,
+          .ct-series-b .ct-bar,
+          .ct-series-b .ct-slice-donut {
+              background-color: #f05b4f;
           }
-          .ct-legend-box.ct-series-c {
-            background-color: #f4c63d;
+          
+          
+          .ct-series-c .ct-point,
+          .ct-series-c .ct-line,
+          .ct-series-c .ct-bar,
+          .ct-series-c .ct-slice-donut {
+              background-color: #f4c63d;
           }
-          .ct-legend-box.ct-series-d {
-            background-color: #d17905;
+          
+          .ct-series-d .ct-point,
+          .ct-series-d .ct-line,
+          .ct-series-d .ct-bar,
+          .ct-series-d .ct-slice-donut {
+              background-color: #d17905;
           }
-          .ct-legend-box.ct-series-e {
-            background-color: #453d3f;
+          
+          .ct-series-e .ct-point,
+          .ct-series-e .ct-line,
+          .ct-series-e .ct-bar,
+          .ct-series-e .ct-slice-donut {
+              background-color: #453d3f;
           }
-          .ct-legend-box.ct-series-f {
-            background-color: #59922b;
+          
+          .ct-series-f .ct-point,
+          .ct-series-f .ct-line,
+          .ct-series-f .ct-bar,
+          .ct-series-f .ct-slice-donut {
+              background-color: #59922b;
           }
-          .ct-legend-box.ct-series-g {
-            background-color: #0544d3;
+          
+          .ct-series-g .ct-point,
+          .ct-series-g .ct-line,
+          .ct-series-g .ct-bar,
+          .ct-series-g .ct-slice-donut {
+              background-color: #0544d3;
           }
-          .ct-legend-box.ct-series-h {
-            background-color: #6b0392;
+          
+          .ct-series-h .ct-point,
+          .ct-series-h .ct-line,
+          .ct-series-h .ct-bar,
+          .ct-series-h .ct-slice-donut {
+              background-color: #6b0392;
           }
-          .ct-legend-box.ct-series-i {
-            background-color: #f05b4f;
+          
+          .ct-series-i .ct-point,
+          .ct-series-i .ct-line,
+          .ct-series-i .ct-bar,
+          .ct-series-i .ct-slice-donut {
+              background-color: #f05b4f;
           }
-          .ct-legend-box.ct-series-j {
-            background-color: #dda458;
+          
+          .ct-series-j .ct-point,
+          .ct-series-j .ct-line,
+          .ct-series-j .ct-bar,
+          .ct-series-j .ct-slice-donut {
+              background-color: #dda458;
           }
-          .ct-legend-box.ct-series-k {
-            background-color: #eacf7d;
+          
+          .ct-series-k .ct-point,
+          .ct-series-k .ct-line,
+          .ct-series-k .ct-bar,
+          .ct-series-k .ct-slice-donut {
+              background-color: #eacf7d;
           }
-          .ct-legend-box.ct-series-l {
-            background-color: #86797d;
+          
+          .ct-series-l .ct-point,
+          .ct-series-l .ct-line,
+          .ct-series-l .ct-bar,
+          .ct-series-l .ct-slice-donut {
+              background-color: #86797d;
           }
-          .ct-legend-box.ct-series-m {
-            background-color: #b2c326;
+          
+          .ct-series-m .ct-point,
+          .ct-series-m .ct-line,
+          .ct-series-m .ct-bar,
+          .ct-series-m .ct-slice-donut {
+              background-color: #b2c326;
           }
-          .ct-legend-box.ct-series-n {
-            background-color: #6188e2;
+          
+          .ct-series-n .ct-point,
+          .ct-series-n .ct-line,
+          .ct-series-n .ct-bar,
+          .ct-series-n .ct-slice-donut {
+              background-color: #6188e2;
           }
-          .ct-legend-box.ct-series-o {
-            background-color: #a748ca;
+          
+          .ct-series-o .ct-point,
+          .ct-series-o .ct-line,
+          .ct-series-o .ct-bar,
+          .ct-series-o .ct-slice-donut {
+              background-color: #a748ca;
           }
             `;
           divBoxWrapper.appendChild(addBoxStyle);
@@ -168,13 +228,13 @@
           var addLegend = [];
           for (var i = 0; i < chart.data.series.length; i++) {
             divBox[i] = document.createElement('div');
-            divBox[i].setAttribute('class', 'ct-label ct-legend-box ' + seriesClassName[i].className);
+            divBox[i].setAttribute('class', 'ct-label ct-legend-box ct-point ct-line ct-bar ct-slice-donut');
             divBox[i].setAttribute('xmlns', Chartist.namespaces.xmlns);
             divBox[i].style.cssText = `display: inline-block; margin: 0 0.1rem 0; width: ${fontSize * 0.75}px; height: ${fontSize * 0.75}px;`;
             divBox[i].innerHTML = '&nbsp;&nbsp;&nbsp;'
 
             divWrapperItem[i] = document.createElement('div');
-            divWrapperItem[i].setAttribute('class', 'ct-legend-box-wrapper-item');
+            divWrapperItem[i].setAttribute('class', 'ct-legend-box-wrapper-item ' + seriesClassName[i].className);//
             divWrapperItem[i].setAttribute('xmlns', Chartist.namespaces.xmlns);
             divWrapperItem[i].style.cssText = leftRightItem;
             divBoxWrapper.appendChild(divWrapperItem[i]);
@@ -186,7 +246,7 @@
             } else {
               addLegend[i].innerHTML = options.seriesName[i] || defaultOptions.seriesName[0];
             }
-            addLegend[i].setAttribute('class', 'ct-label ct-legend-title ' + seriesClassName[i].className);
+            addLegend[i].setAttribute('class', 'ct-label ct-legend-title');
             addLegend[i].setAttribute('xmlns', Chartist.namespaces.xmlns);
             addLegend[i].style.cssText = `display:inline-block; margin: 0 1em 0 0.25em;`;
 
