@@ -57,3 +57,19 @@ Here the example:
         new Chartist.Line('.ct-chart', data, options);
 </script>
 ```
+
+By default, the colors of box legend will follow colors of Charties series. 
+
+If you want to customize Chartist `css`, especially when declaring `stroke` or `fill` color for each data series, please also include `background-color` with same value with followed by `!important` to make sure it's override plugin `style`.
+
+Here the example
+
+```css
+.ct-series-a .ct-point,       
+.ct-series-a .ct-line, 
+.ct-series-a .ct-bar, 
+.ct-series-a .ct-slice-donut {
+    stroke: blue;
+    background-color: blue!important;  /* add this parameter with color value as your custom value for stroke or fill. */
+}
+```
