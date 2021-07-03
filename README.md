@@ -2,6 +2,8 @@
 
 Plugin to create Chartist legend.
 
+Here the [demo](https://syaifurrizal.github.io/chartist-plugin-legendTitle/).
+
 ## Available Options
 
 ```javascript
