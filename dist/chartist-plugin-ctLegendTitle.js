@@ -16,7 +16,7 @@
 
   /**
    * Chartist.js plugin to to display table legend
-   * version 0.0.1
+   * version 0.0.2
    * author: Syaifur Rizal
    * git username: syaifurrizal
    * license: MIT and any Chartist's licenses already have. 
@@ -27,24 +27,31 @@
     var defaultOptions = {
       position: 'bottom',
       seriesName: ['Please add seriesName'],
-      legendPadding: {
-        top: 0,
-        right: 0,
-        bottom: 0,
-        left: undefined
-      },
-      width: 'max-content',
-      noop: Chartist.noop
+      width: 'max-content'
     };
-    
+
+    // Find the font size of root for determine the font size and height of legend.
+    var fontSize = parseFloat(window.getComputedStyle(document.querySelector('html'), null).fontSize);
+
     Chartist.plugins = Chartist.plugins || {};
     Chartist.plugins.ctLegendTitle = function (options) {
-
       options = Chartist.extend({}, defaultOptions, options);
 
       return function ctLegendTitle(chart) {
         chart.on('created', function (data) {
+          // Get width & hight of main container (div) where the Chartist placed.
+          var width = chart.container.clientWidth;
+          var height = chart.container.clientHeight;
 
+          // Get chart padding.
+          var chartPadding = chart.options.chartPadding;
+
+          // Get width & height of chart grid.
+          var gridWidth = chart.container.clientWidth - chartPadding.right - chartPadding.left;
+          var gridHeight = chart.container.clientHeight - chartPadding.top - chartPadding.bottom;
+          // console.log(gridHeight);
+
+          // Get series names
           function setSeriesClassNames() {
             chart.data.series = chart.data.series.map(function (series, seriesIndex) {
               if (typeof series !== 'object') {
@@ -57,203 +64,102 @@
             });
             return chart.data.series;
           }
-
           var seriesClassName = setSeriesClassNames();
-          var height = chart.defaultOptions.height || chart.options.height ?
-            chart.defaultOptions.height || chart.options.height : chart.container.clientHeight;
-          var width = chart.defaultOptions.width || chart.options.width ?
-            chart.defaultOptions.width || chart.options.width : chart.container.clientWidth;
-          var getElement = document.querySelector(".ct-label");
-          var lineHeight = parseFloat(window.getComputedStyle(getElement, null).lineHeight);
-          var fontSize = parseFloat(window.getComputedStyle(getElement, null).fontSize);
-          var gridHeight = height - chart.options.chartPadding.top - chart.options.chartPadding.bottom;
-          var gridWidth = width - chart.options.chartPadding.right - chart.options.chartPadding.left;
 
+          // Count the series index
+          var seriesIndex = chart.data.series.length;
+
+          // Create new group ct-legends
           var gContainer = new Chartist.Svg('g');
           gContainer.attr({
           }).addClass('ct-legends');
 
+          // Create foreignObject
           var foreignObject = new Chartist.Svg('foreignObject');
           foreignObject.attr({
             x: 0,
             y: 0,
-            width: width,
-            height: height,
+            width: 100 + '%',
+            height: 100 + '%',
             'style': 'overflow: visible;'
-          }).addClass('ct-foreignContainer');
+          }).addClass('ct-legendContainer');
 
-          // LOL, LOL, LOL. Total mess after this line. But it's worthed!
-          var upperLower, leftRight, leftRightItem, onLeftRight;
+          // Create div wrapper as main container after creating foreignObject.
+          var divWrap = document.createElement('div');
+          divWrap.setAttribute('class', 'ct-legend-div-wrapper');
+          divWrap.setAttribute('xmlns:ct', Chartist.namespaces.ct);
+
+          // Create style element to control legend.
+          var styleEl = document.createElement('style');
           if (options.position === 'top') {
-            upperLower = `padding-top: ${height - gridHeight - data.options.chartPadding.bottom - (2 * lineHeight)}`;
-            leftRight = `text-align: center; margin: 0 auto 0`;
-            leftRightItem = `display: inline-block; margin-bottom: .5em`;
-            onLeftRight = `width: 100%`;
+            styleEl.innerHTML = `.${chart.container.attributes[0].textContent} .ct-legend-div-wrapper{display: flex; flex-direction: row; justify-content: center; align-items: baseline;  padding-top: ${chartPadding.top - (fontSize * 2)}px; max-width: ${gridWidth}px; margin: 0 auto;} .${chart.container.attributes[0].textContent} .ct-legend-div-wrapper .ct-legend-div-wrapper-item{width: ${typeof options.width === 'string' ? options.width : options.width + 'px'};}`;
           } else if (options.position === 'right') {
-            upperLower = `padding-top: ${data.options.chartPadding.top + options.legendPadding.top}`;
-            leftRight = `text-align: left; margin: 0 auto 0 ${chart.options.chartPadding.right < 50 ? '75%' : gridWidth + chart.options.chartPadding.left + lineHeight + 'px'}`;
-            leftRightItem = `margin-bottom: .5em; display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: flex-start; align-items: baseline;`;
-            onLeftRight = `width: ${typeof options.width !== 'string' ?
-              options.width + 'px' : (options.width === 'max-content' || options.width === 'min-content' && options.width ? options.width : defaultOptions.noop(data.options.chartPadding.right - 7) + 'px')}`;
+            styleEl.innerHTML = `.${chart.container.attributes[0].textContent} .ct-legend-div-wrapper{display: flex; flex-direction: column; justify-content: flex-start; align-items: baseline; padding-left: ${chartPadding.left + gridWidth + fontSize}px; width: max-content; padding-top: ${chartPadding.top - fontSize}px} .${chart.container.attributes[0].textContent} .ct-legend-div-wrapper .ct-legend-div-wrapper-item{width: ${typeof options.width === 'string' ? options.width : options.width + 'px'};}`;
           } else if (options.position === 'bottom') {
-            upperLower = `padding-top: ${height - data.options.chartPadding.bottom - lineHeight}`;
-            leftRight = `text-align: center; margin: 0 auto`;
-            leftRightItem = `display: inline-block; margin-bottom: .5em`;
-            onLeftRight = `width: 100%`;
+            styleEl.innerHTML = `.${chart.container.attributes[0].textContent} .ct-legend-div-wrapper{display: flex; flex-direction: row; justify-content: center; align-items: baseline; padding-top: ${chartPadding.top + gridHeight - fontSize}px; max-width: ${gridWidth}px; margin: 0 auto;} .${chart.container.attributes[0].textContent} .ct-legend-div-wrapper .ct-legend-div-wrapper-item{width: ${typeof options.width === 'string' ? options.width : options.width + 'px'};}`;
           } else if (options.position === 'left') {
-            upperLower = `padding-top: ${data.options.chartPadding.top + options.legendPadding.top}`;
-            leftRight = `text-align: left; margin: 0 ${gridWidth + chart.options.chartPadding.right}px 0 auto`;
-            leftRightItem = `margin-bottom: .5em; display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: flex-start; align-items: baseline;`;
-            onLeftRight = `width: ${typeof options.width !== 'string' ? options.width + 'px' : (chart.options.width === 'max-content' || chart.options.width === 'min-content' && chart.options.width ? options.width : defaultOptions.noop(data.options.chartPadding.left - 7) + 'px')}`;
+            styleEl.innerHTML = `.${chart.container.attributes[0].textContent} .ct-legend-div-wrapper{display: flex; flex-direction: column; justify-content: flex-start; align-items: baseline; padding-right: ${chartPadding.right + gridWidth - (fontSize * 0.25) - chart.defaultOptions.chartPadding.left}px; margin-left: auto; width: max-content; padding-top: ${chartPadding.top - fontSize}px} .${chart.container.attributes[0].textContent} .ct-legend-div-wrapper .ct-legend-div-wrapper-item{width: ${typeof options.width === 'string' ? options.width : options.width + 'px'};}`;
           }
 
-          var divBoxWrapper = document.createElement('div');
-          divBoxWrapper.setAttribute('class', 'ct-label ct-legend-box-wrapper ');
-          divBoxWrapper.setAttribute('xmlns', Chartist.namespaces.xmlns);
-          divBoxWrapper.style.cssText = `${upperLower}px; display: block; ${leftRight}; ${onLeftRight}`;
-          foreignObject._node.appendChild(divBoxWrapper);
+          // Append style tag to divWrap.
+          foreignObject._node.append(styleEl)
 
-          var addBoxStyle = document.createElement('style');
-          addBoxStyle.innerHTML = `
-          .ct-series-a .ct-point,
-          .ct-series-a .ct-line,
-          .ct-series-a .ct-bar,
-          .ct-series-a .ct-slice-donut {
-              background-color: #d70206;
-          }
-          
-          .ct-series-b .ct-point,
-          .ct-series-b .ct-line,
-          .ct-series-b .ct-bar,
-          .ct-series-b .ct-slice-donut {
-              background-color: #f05b4f;
-          }
-          
-          
-          .ct-series-c .ct-point,
-          .ct-series-c .ct-line,
-          .ct-series-c .ct-bar,
-          .ct-series-c .ct-slice-donut {
-              background-color: #f4c63d;
-          }
-          
-          .ct-series-d .ct-point,
-          .ct-series-d .ct-line,
-          .ct-series-d .ct-bar,
-          .ct-series-d .ct-slice-donut {
-              background-color: #d17905;
-          }
-          
-          .ct-series-e .ct-point,
-          .ct-series-e .ct-line,
-          .ct-series-e .ct-bar,
-          .ct-series-e .ct-slice-donut {
-              background-color: #453d3f;
-          }
-          
-          .ct-series-f .ct-point,
-          .ct-series-f .ct-line,
-          .ct-series-f .ct-bar,
-          .ct-series-f .ct-slice-donut {
-              background-color: #59922b;
-          }
-          
-          .ct-series-g .ct-point,
-          .ct-series-g .ct-line,
-          .ct-series-g .ct-bar,
-          .ct-series-g .ct-slice-donut {
-              background-color: #0544d3;
-          }
-          
-          .ct-series-h .ct-point,
-          .ct-series-h .ct-line,
-          .ct-series-h .ct-bar,
-          .ct-series-h .ct-slice-donut {
-              background-color: #6b0392;
-          }
-          
-          .ct-series-i .ct-point,
-          .ct-series-i .ct-line,
-          .ct-series-i .ct-bar,
-          .ct-series-i .ct-slice-donut {
-              background-color: #f05b4f;
-          }
-          
-          .ct-series-j .ct-point,
-          .ct-series-j .ct-line,
-          .ct-series-j .ct-bar,
-          .ct-series-j .ct-slice-donut {
-              background-color: #dda458;
-          }
-          
-          .ct-series-k .ct-point,
-          .ct-series-k .ct-line,
-          .ct-series-k .ct-bar,
-          .ct-series-k .ct-slice-donut {
-              background-color: #eacf7d;
-          }
-          
-          .ct-series-l .ct-point,
-          .ct-series-l .ct-line,
-          .ct-series-l .ct-bar,
-          .ct-series-l .ct-slice-donut {
-              background-color: #86797d;
-          }
-          
-          .ct-series-m .ct-point,
-          .ct-series-m .ct-line,
-          .ct-series-m .ct-bar,
-          .ct-series-m .ct-slice-donut {
-              background-color: #b2c326;
-          }
-          
-          .ct-series-n .ct-point,
-          .ct-series-n .ct-line,
-          .ct-series-n .ct-bar,
-          .ct-series-n .ct-slice-donut {
-              background-color: #6188e2;
-          }
-          
-          .ct-series-o .ct-point,
-          .ct-series-o .ct-line,
-          .ct-series-o .ct-bar,
-          .ct-series-o .ct-slice-donut {
-              background-color: #a748ca;
-          }
-            `;
-          divBoxWrapper.appendChild(addBoxStyle);
+          var divWrapItem = [];
+          var svgBox = [];
+          var rectBox = [];
+          var spanTxt = [];
+          for (var i = 0; i < seriesIndex; i++) {
+            // Create div wrap for each legend item to control them.
+            divWrapItem[i] = document.createElement('div');
+            divWrapItem[i].setAttribute('class', 'ct-legend-div-wrapper-item');
+            divWrapItem[i].setAttribute('xmlns:ct', Chartist.namespaces.ct);
+            // divWrapItem.style.cssText = `height:${height}; width:${width}`;
 
-          var divWrapperItem = [];
-          var divBox = [];
-          var addLegend = [];
-          for (var i = 0; i < chart.data.series.length; i++) {
-            divBox[i] = document.createElement('div');
-            divBox[i].setAttribute('class', 'ct-label ct-legend-box ct-point ct-line ct-bar ct-slice-donut');
-            divBox[i].setAttribute('xmlns', Chartist.namespaces.xmlns);
-            divBox[i].style.cssText = `display: inline-block; margin: 0 0.1rem 0; width: ${fontSize * 0.75}px; height: ${fontSize * 0.75}px;`;
-            divBox[i].innerHTML = '&nbsp;&nbsp;&nbsp;'
+            // Create svg element inside foreingObject for rectangle identifier of each legend.
+            svgBox[i] = document.createElementNS(Chartist.namespaces.svg, 'svg');
+            svgBox[i].setAttributeNS(Chartist.namespaces.xhtml, 'xhtml', Chartist.namespaces.xhtml);
+            svgBox[i].setAttribute('width', fontSize * 0.65 + 'px');
+            svgBox[i].setAttribute('height', fontSize * 0.65 + 'px');
+            svgBox[i].setAttribute('x', '0');
+            svgBox[i].setAttribute('y', '0');
+            svgBox[i].setAttribute('style', `overflow: hidden`);
+            svgBox[i].setAttribute('class', `ct-series ${seriesClassName[i].className}`);
 
-            divWrapperItem[i] = document.createElement('div');
-            divWrapperItem[i].setAttribute('class', 'ct-legend-box-wrapper-item ' + seriesClassName[i].className);//
-            divWrapperItem[i].setAttribute('xmlns', Chartist.namespaces.xmlns);
-            divWrapperItem[i].style.cssText = leftRightItem;
-            divBoxWrapper.appendChild(divWrapperItem[i]);
-            divWrapperItem[i].appendChild(divBox[i]);
+            // Create rect.
+            rectBox[i] = new Chartist.Svg('rect');
+            rectBox[i].attr({
+              x: 0,
+              y: 0,
+              width: fontSize * 0.65 + 'px',
+              height: fontSize * 0.65 + 'px',
+              'class': 'ct-label ct-legend-box ct-point ct-line ct-bar ct-slice-donut',
+              'style': 'overflow: hidden;'
+            }).addClass('ct-svg-rect');
 
-            addLegend[i] = document.createElement('span');
+            // Create text span.
+            spanTxt[i] = document.createElement('span');
+            spanTxt[i].setAttribute('class', 'ct-label ct-legend-title');
+            spanTxt[i].setAttribute('xmlns', Chartist.namespaces.xmlns);
+            spanTxt[i].style.cssText = `display:inline-block; margin: 0 1em 0 0.25em;`;
+
             if (chart.data.series.name) {
-              addLegend[i].innerHTML = chart.data.series[i].name;
+              // Add text if available
+              spanTxt[i].innerHTML = chart.data.series[i].name;
             } else {
-              addLegend[i].innerHTML = options.seriesName[i] || defaultOptions.seriesName[0];
+              spanTxt[i].innerHTML = options.seriesName[i] || defaultOptions.seriesName[0];
             }
-            addLegend[i].setAttribute('class', 'ct-label ct-legend-title');
-            addLegend[i].setAttribute('xmlns', Chartist.namespaces.xmlns);
-            addLegend[i].style.cssText = `display:inline-block; margin: 0 1em 0 0.25em;`;
 
-            divWrapperItem[i].appendChild(addLegend[i]);
+            // Construct legend components
+            svgBox[i].append(rectBox[i]._node);
+            divWrapItem[i].append(svgBox[i]);
+            divWrapItem[i].append(spanTxt[i]);
+            divWrap.append(divWrapItem[i]);
           }
 
-          data.svg.append(gContainer.append(foreignObject, true));
+          foreignObject._node.append(divWrap);
+          gContainer.append(foreignObject, true);
+          chart.svg.append(gContainer, false);
+
         });
       };
     };
