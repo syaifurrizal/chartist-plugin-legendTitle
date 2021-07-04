@@ -14,12 +14,6 @@ Please read Chartist official page [here](https://gionkunz.github.io/chartist-js
 var options = {
       position: 'top', // Available options: 'top', 'right', 'bottom', 'left'. All options should be `string`
       seriesName: ['Add first seriesName', 'Add second seriesName'], // This options to naming the series in case the series name didn't declared in main chart options.
-      legendPadding: { // This option is optional. Paramater available same as when we declare padding in css.
-        top: 15,
-        right: 15,
-        bottom: 5,
-        left: 15
-      },
       width: 'max-content', // This option determine the width of legends when placed on left or right of the chart.
     };
 ```
@@ -59,17 +53,3 @@ Here the example:
 ```
 
 By default, the colors of box legend will follow colors of Charties series. 
-
-If you want to customize Chartist `css`, especially when declaring `stroke` or `fill` color for each data series, please also include `background-color` with same value with followed by `!important` to make sure it's override plugin `style`.
-
-Here the example
-
-```css
-.ct-series-a .ct-point,       
-.ct-series-a .ct-line, 
-.ct-series-a .ct-bar, 
-.ct-series-a .ct-slice-donut {
-    stroke: blue;
-    background-color: blue!important;  /* add this parameter with color value as your custom value for stroke or fill. */
-}
-```
