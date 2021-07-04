@@ -14,14 +14,14 @@ Please read Chartist official page [here](https://gionkunz.github.io/chartist-js
 var options = {
       position: 'top', // Available options: 'top', 'right', 'bottom', 'left'. All options should be `string`
       seriesName: ['Add first seriesName', 'Add second seriesName'], // This options to naming the series in case the series name didn't declared in main chart options.
-      width: 'max-content', // This option determine the width of legends when placed on left or right of the chart.
+      width: 'max-content', // This option (optional) determine the width of legends when placed on left or right of the chart.
     };
 ```
 <br/>
 
 ## Important:
 
-Especially when set the legend on `right` or `left`, we should add `chartPadding` to the Chartist main options.
+Especially when set the legend position on `right` or `left`, we should add `chartPadding` to the Chartist main options.
 
 Here the example:
 
