@@ -6,7 +6,7 @@ Here the [demo](https://syaifurrizal.github.io/chartist-plugin-legendTitle/).
 
 ## Installation
 
-Please read Chartist official page [here](https://gionkunz.github.io/chartist-js/plugins.html) on how to add plugin, then add this plugin to your awesome data.
+Please read Chartist official page [here](https://gionkunz.github.io/chartist-js/plugins.html) on how to add plugin, then add this plugin to your data.
 
 ## Available Options
 
