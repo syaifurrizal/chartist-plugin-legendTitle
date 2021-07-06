@@ -1,117 +1,140 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
 
-    <link rel="stylesheet" href="chartist.css">
-    <script src="https://cdn.jsdelivr.net/npm/chartist@0.11.4/dist/chartist.min.js"></script>
-    <script src="chartist-plugin-ctLegendTitle.min.js"></script>
+    <link rel="stylesheet" href="./chartist.css" />
+    <script src="./chartist.js"></script>
+    <script src="./chartist-plugin-ctLegendTitle.js"></script>
 
     <style>
-        html,
-        body {
-            font-family: Oxygen, Helvetica, Arial, sans-serif;
-            font-size: 16px;
-            line-height: 1.5;
-        }
+      html,
+      body {
+        font-family: Oxygen, Helvetica, Arial, sans-serif;
+        font-size: 16px;
+        line-height: 1.5;
+      }
 
-        .sr {
-            max-width: 450px;
-            margin-top: 5rem;
-            margin-right: auto;
-            margin-left: auto;
-        }
+      .sr {
+        max-width: 450px;
+        margin-top: 5rem;
+        margin-right: auto;
+        margin-left: auto;
+      }
 
-        .sr+.sr {
-            margin-top: 3rem;
-            margin-bottom: 3rem;
-        }
+      .sr + .sr {
+        margin-top: 3rem;
+        margin-bottom: 3rem;
+      }
     </style>
+  </head>
 
-</head>
-
-<body>
+  <body>
     <div class="sr">
-        <div class="ct-chart-1"></div>
+      <div class="ct-chart-1"></div>
     </div>
     <div class="sr">
-        <div class="ct-chart-2"></div>
+      <div class="ct-chart-2"></div>
     </div>
     <div class="sr">
-        <div class="ct-chart-3"></div>
+      <div class="ct-chart-3"></div>
     </div>
     <div class="sr">
-        <div class="ct-chart-4"></div>
+      <div class="ct-chart-4"></div>
     </div>
 
     <script>
-        var data = {
-            labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
-            series: [
-                [1, 2, 3, 5, 30],
-                [0, 1, 4, 3, 6],
-                [0, 3, 2, 3, 4]
-            ]
-        };
+      var data = {
+        labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
+        series: [
+          [1, 2, 3, 5, 30],
+          [0, 1, 4, 3, 6],
+          [0, 3, 2, 3, 4],
+        ],
+      };
 
-        var options1 = {
-            chartPadding: {
-                top: 35
+      var options1 = {
+        chartPadding: {
+          top: 35,
+        },
+        showPoint: false,
+        plugins: [
+          Chartist.plugins.ctLegendTitle({
+            position: 'top',
+            seriesName: ['First series', 'Second series', 'Third series'],
+          }),
+        ],
+      };
+
+      var options2 = {
+        chartPadding: {
+          left: 120,
+        },
+        plugins: [
+          Chartist.plugins.ctLegendTitle({
+            position: 'right',
+            seriesName: ['First series', 'Second series', 'Third series'],
+          }),
+        ],
+      };
+
+      var options3 = {
+        chartPadding: {
+          bottom: 20,
+        },
+        plugins: [
+          Chartist.plugins.ctLegendTitle({
+            position: 'bottom',
+            seriesName: ['First series', 'Second series', 'Third series'],
+          }),
+        ],
+      };
+
+      new Chartist.Bar('.ct-chart-1', data, options1);
+      new Chartist.Line('.ct-chart-2', data, options2);
+      new Chartist.Line('.ct-chart-3', data, options3);
+
+      var data = {
+        labels: ['Bananas', 'Apples', 'Grapes'],
+        series: [20, 15, 40],
+      };
+
+      var options = {
+        labelInterpolationFnc: function (value) {
+          return value[0];
+        },
+        plugins: [
+          Chartist.plugins.ctLegendTitle({
+            position: 'right',
+            seriesName: ['First series', 'Second series', 'Third series'],
+          }),
+        ],
+      };
+
+      var responsiveOptions = [
+        [
+          'screen and (min-width: 640px)',
+          {
+            chartPadding: 30,
+            labelOffset: 100,
+            labelDirection: 'explode',
+            labelInterpolationFnc: function (value) {
+              return value;
             },
-            showPoint: false,
-            plugins: [
-                Chartist.plugins.ctLegendTitle({
-                    position: 'top',
-                    seriesName: ['First series', 'Second series','Third series']
-                })
-            ]
-        };
-
-        var options2 = {
-            chartPadding: {
-                right: 130
-            },
-            plugins: [
-                Chartist.plugins.ctLegendTitle({
-                    position: 'right',
-                    seriesName: ['First series', 'Second series','Third series']
-                })
-            ]
-        };
-
-        var options3 = {
-            chartPadding: {
-                bottom: 20
-            },
-            plugins: [
-                Chartist.plugins.ctLegendTitle({
-                    position: 'bottom',
-                    seriesName: ['First series', 'Second series','Third series']
-                })
-            ]
-        };
-
-        var options4 = {
-            chartPadding: {
-                left: 100
-            },
-            plugins: [
-                Chartist.plugins.ctLegendTitle({
-                    position: 'left',
-                    seriesName: ['First series', 'Second series','Third series'],
-                })
-            ]
-        };
-
-        new Chartist.Bar('.ct-chart-1', data, options1);
-        new Chartist.Line('.ct-chart-2', data, options2);
-        new Chartist.Line('.ct-chart-3', data, options3);
-        new Chartist.Line('.ct-chart-4', data, options4);
+          },
+        ],
+        [
+          'screen and (min-width: 1024px)',
+          {
+            labelOffset: 80,
+            chartPadding: 20,
+          },
+        ],
+      ];
+      new Chartist.Pie('.ct-chart-4', data, options);
     </script>
-</body>
-
+  </body>
 </html>
