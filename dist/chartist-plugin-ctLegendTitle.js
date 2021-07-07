@@ -15,7 +15,7 @@
 })(this, function (Chartist) {
   /**
    * Chartist.js plugin to to display table legend
-   * version 0.0.3
+   * version 0.0.4
    * author: Syaifur Rizal
    * git username: syaifurrizal
    * licenses: MIT and all original Chartist's licenses.
@@ -25,7 +25,7 @@
     'use strict';
 
     var ctLegend = {
-      version: '0.0.3',
+      version: '0.0.4',
     };
 
     var defaultOptions = {
@@ -36,9 +36,7 @@
     };
 
     // Find the font size of root for determine the font size and height of legend.
-    var fontSize = parseFloat(
-      window.getComputedStyle(document.querySelector('html'), null).fontSize
-    );
+    var fontSize = parseFloat(window.getComputedStyle(document.querySelector('html'), null).fontSize);
 
     Chartist.plugins = Chartist.plugins || {};
     Chartist.plugins.ctLegendTitle = function (options) {
@@ -54,11 +52,7 @@
 
           if (tag === 'svg') {
             svg = document.createElementNS(Chartist.namespaces[tag], tag);
-            svg.setAttributeNS(
-              Chartist.namespaces.svg,
-              'svg',
-              Chartist.namespaces.svg
-            );
+            svg.setAttributeNS(Chartist.namespaces.svg, 'svg', Chartist.namespaces.svg);
           } else {
             try {
               // Declaring namespace
@@ -145,31 +139,18 @@
           var chartPadding = chart.options.chartPadding;
 
           // Get width & height of chart grid.
-          var gridWidth =
-            chart.container.clientWidth -
-            chartPadding.right -
-            chartPadding.left;
-          var gridHeight =
-            chart.container.clientHeight -
-            chartPadding.top -
-            chartPadding.bottom;
+          var gridWidth = chart.container.clientWidth - chartPadding.right - chartPadding.left;
+          var gridHeight = chart.container.clientHeight - chartPadding.top - chartPadding.bottom;
 
           // Get series names
           function setSeriesClassNames() {
-            chart.data.series = chart.data.series.map(function (
-              series,
-              seriesIndex
-            ) {
+            chart.data.series = chart.data.series.map(function (series, seriesIndex) {
               if (typeof series !== 'object') {
                 series = {
                   value: series,
                 };
               }
-              series.className =
-                series.className ||
-                chart.options.classNames.series +
-                  '-' +
-                  Chartist.alphaNumerate(seriesIndex);
+              series.className = series.className || chart.options.classNames.series + '-' + Chartist.alphaNumerate(seriesIndex);
               return series;
             });
             return chart.data.series;
@@ -201,61 +182,57 @@
 
           // Create style element to control legend.
           var styleEl = document.createElement('style');
-          const repetitiveCSS = `.ct-legends svg{overflow: hidden} .ct-legendContainer{overflow: visible;} .ct-legends .ct-label.ct-legend-title{display:inline-block; margin: 0 1em 0 0.25em;}`;
+          const repetitiveCSS = `.${chart.container.attributes[0].textContent} .ct-legend-div-wrapper .ct-legend-div-wrapper-item{display:flex; flex-direction: row; flex-wrap: nowrap; align-items: baseline; margin-bottom: 0.5em;} .ct-legends svg{overflow: hidden} .ct-legendContainer{overflow: visible;} .ct-legends .ct-label.ct-legend-title{display:inline-block; width: max-content; margin: 0 1em 0 0.25em;}`;
           if (options.position === 'top') {
             styleEl.innerHTML = `.${
               chart.container.attributes[0].textContent
-            } .ct-legend-div-wrapper{display: flex; flex-direction: row; justify-content: center; align-items: baseline;  padding-top: ${
-              chartPadding.top - fontSize * 2
-            }px; max-width: ${gridWidth}px; margin: 0 auto;} .${
+            } .ct-legend-div-wrapper{display: flex; flex-direction: row; justify-content: center; align-items: baseline; flex-wrap: wrap; padding-top: ${
+              (chartPadding.top ? chartPadding.top : 0) - fontSize * 2
+            }px; max-width: ${gridWidth ? gridWidth + 'px' : '100%'}; margin: 0 auto;} .${
               chart.container.attributes[0].textContent
             } .ct-legend-div-wrapper .ct-legend-div-wrapper-item{width: ${
-              typeof options.width === 'string'
-                ? options.width
-                : options.width + 'px'
-            };}`;
-          } else if (options.position === 'left') {
-            styleEl.innerHTML = `.${
-              chart.container.attributes[0].textContent
-            } .ct-legend-div-wrapper{display: flex; flex-direction: column; justify-content: flex-start; align-items: baseline; padding-left: ${
-              chartPadding.left + gridWidth + fontSize
-            }px; width: max-content; padding-top: ${
-              chartPadding.top - fontSize
-            }px} .${
-              chart.container.attributes[0].textContent
-            } .ct-legend-div-wrapper .ct-legend-div-wrapper-item{width: ${
-              typeof options.width === 'string'
-                ? options.width
-                : options.width + 'px'
-            };}`;
-          } else if (options.position === 'bottom') {
-            styleEl.innerHTML = `.${
-              chart.container.attributes[0].textContent
-            } .ct-legend-div-wrapper{display: flex; flex-direction: row; justify-content: center; align-items: baseline; padding-top: ${
-              chartPadding.top + gridHeight - fontSize
-            }px; max-width: ${gridWidth}px; margin: 0 auto;} .${
-              chart.container.attributes[0].textContent
-            } .ct-legend-div-wrapper .ct-legend-div-wrapper-item{width: ${
-              typeof options.width === 'string'
-                ? options.width
-                : options.width + 'px'
+              typeof options.width === 'string' ? options.width : options.width + 'px'
             };}`;
           } else if (options.position === 'right') {
             styleEl.innerHTML = `.${
               chart.container.attributes[0].textContent
-            } .ct-legend-div-wrapper{display: flex; flex-direction: column; justify-content: flex-start; align-items: baseline; padding-right: ${
-              chartPadding.right +
-              gridWidth -
-              fontSize * 0.25 -
-              chart.defaultOptions.chartPadding.left
-            }px; margin-left: auto; width: max-content; padding-top: ${
-              chartPadding.top - fontSize
-            }px} .${
+            } .ct-legend-div-wrapper{display: flex; flex-direction: column; justify-content: flex-start; align-items: baseline; margin-left: auto; padding-left: ${
+              (chartPadding.left ? chartPadding.left : 0) + (gridWidth ? gridWidth : 0) + fontSize >= width
+                ? 0
+                : (chartPadding.left ? chartPadding.left : 0) + (gridWidth ? gridWidth : 0) + fontSize
+            }px; width: max-content; padding-top: ${(chartPadding.top ? chartPadding.top : 2 * fontSize) - 0.5 * fontSize}px} .${
               chart.container.attributes[0].textContent
             } .ct-legend-div-wrapper .ct-legend-div-wrapper-item{width: ${
-              typeof options.width === 'string'
-                ? options.width
-                : options.width + 'px'
+              typeof options.width === 'string' ? options.width : options.width + 'px'
+            };}`;
+          } else if (options.position === 'bottom') {
+            styleEl.innerHTML = `.${
+              chart.container.attributes[0].textContent
+            } .ct-legend-div-wrapper{display: flex; flex-direction: row; justify-content: center; flex-wrap: wrap; align-items: baseline; padding-top: ${
+              (chartPadding.top ? chartPadding.top : height - fontSize) + (gridHeight ? gridHeight : 0) - fontSize
+            }px; max-width: ${gridWidth ? gridWidth + 'px' : '100%'}; margin: 0 auto;} .${
+              chart.container.attributes[0].textContent
+            } .ct-legend-div-wrapper .ct-legend-div-wrapper-item{width: ${
+              typeof options.width === 'string' ? options.width : options.width + 'px'
+            };}`;
+          } else if (options.position === 'left') {
+            styleEl.innerHTML = `.${
+              chart.container.attributes[0].textContent
+            } .ct-legend-div-wrapper{display: flex; flex-direction: column; justify-content: flex-start; align-items: baseline; margin-right: auto; padding-right: ${
+              (chartPadding.right ? chartPadding.right : width) +
+                (gridWidth ? gridWidth : 0) -
+                fontSize * 0.25 -
+                (chart.defaultOptions.chartPadding.left ? chart.defaultOptions.chartPadding.left : 0) >=
+              width
+                ? 0
+                : (chartPadding.right ? chartPadding.right : width) +
+                  (gridWidth ? gridWidth : 0) -
+                  fontSize * 0.25 -
+                  (chart.defaultOptions.chartPadding.left ? chart.defaultOptions.chartPadding.left : 0)
+            }px; margin-left: auto; width: max-content; padding-top: ${
+              (chartPadding.top ? chartPadding.top : 2 * fontSize) - 0.5 * fontSize
+            }px} .${chart.container.attributes[0].textContent} .ct-legend-div-wrapper .ct-legend-div-wrapper-item{width: ${
+              typeof options.width === 'string' ? options.width : options.width + 'px'
             };}`;
           }
           // Add repetitive css to style tag.
@@ -297,9 +274,7 @@
                 height: 100 + '%',
                 //style: 'fill: blue!important',
               })
-              .addClass(
-                'ct-svg-rect ct-legend-box ct-point ct-line  ct-line ct-bar'
-              ); // ct-slice-donut
+              .addClass('ct-svg-rect ct-legend-box ct-point ct-line  ct-line ct-bar'); // ct-slice-donut
 
             // Create text span.
             spanTxt[i] = new legend();
@@ -309,8 +284,7 @@
               // Add text if available
               spanTxt[i]._node.innerHTML = chart.data.series[i].name;
             } else {
-              spanTxt[i]._node.innerHTML =
-                options.seriesName[i] || defaultOptions.seriesName[0];
+              spanTxt[i]._node.innerHTML = options.seriesName[i] || defaultOptions.seriesName[0];
             }
 
             // Construct legend components
