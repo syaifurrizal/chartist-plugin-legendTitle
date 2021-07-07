@@ -297,6 +297,17 @@
           foreignObject._node.append(divWrap._node);
           gContainer._node.append(foreignObject._node, true);
           chart.svg.append(gContainer, false);
+
+          // Fallback if only stroke color set by Chartist in line and bar chart. This fallback will give the rectangle a fill color base on stroke color.
+          var getChartContainer = document.getElementsByClassName(chart.container.attributes[0].textContent);
+          var getRects = getChartContainer[0].getElementsByClassName('ct-legend-box');
+          var indexRects = getRects.length;
+          for (var getRect in getRects) {
+            for (var n = 0; n < indexRects; n++) {
+              var getRectStroke = window.getComputedStyle(getRects[n]);
+              getRects[n].setAttribute('style', 'fill:' + getRectStroke.stroke + '!important');
+            }
+          }
         });
       };
     };
@@ -304,3 +315,4 @@
 
   return Chartist.plugins.ctLegendTitle;
 });
+
