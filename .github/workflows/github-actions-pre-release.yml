@@ -12,9 +12,6 @@ jobs:
     runs-on: "ubuntu-latest"
 
     steps:
-      - name: "Minify"
-        run: ./.github/scripts/uglifyjs.sh
-        shell: bash
       # ...
       - name: "Build & test"
         run: |
