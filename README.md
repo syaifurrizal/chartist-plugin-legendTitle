@@ -6,7 +6,9 @@ Here the [demo](https://syaifurrizal.github.io/chartist-plugin-legendTitle/).
 
 ## Installation
 
-Please read Chartist official page [here](https://gionkunz.github.io/chartist-js/plugins.html) on how to add plugin, then add this plugin to your data.
+Please read Chartist official page [here](https://gionkunz.github.io/chartist-js/plugins.html) on how to add plugin.
+
+And then add this plugin to your code.
 
 ## Available Options
 
@@ -21,7 +23,7 @@ var options = {
 
 ## Important:
 
-Especially when set the legend position on `right` or `left`, we should add `chartPadding` to the Chartist main options.
+Especially when set the legend position on `right` or `left`, we should add `chartPadding.right` or `chartPadding.left` accordingly where the legend will be positioned in the chart.
 
 Here the example:
 
@@ -38,11 +40,11 @@ Here the example:
 
         var options = {
             chartPadding: {
-                right: 130 // This parameter will help your char be more awesomes!
+                right: 130 // We set the right padding to give a space for the legend. For this case we give 130 on the right because we want to place the legend on right position.
             },
             plugins: [
                 Chartist.plugins.ctLegendTitle({
-                    position: 'right',
+                    position: 'right', // Legend will be placed on the right of chart.
                     seriesName: ['First series', 'Second series','Third series']
                 })
             ]
@@ -52,4 +54,4 @@ Here the example:
 </script>
 ```
 
-By default, the colors of box legend will follow colors of Charties series. 
+By default, the colors of box legend will follow colors of Chartist series. 
