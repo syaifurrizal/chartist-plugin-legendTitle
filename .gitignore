@@ -1,3 +1,4 @@
 temp
 *.sh
-.github/*
+.github/scripts/*
+.*

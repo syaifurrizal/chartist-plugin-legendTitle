@@ -13,7 +13,7 @@ jobs:
 
     steps:
       - name: "Minify"
-        run: ./github/scripts/uglifyjs.sh
+        run: ./.github/scripts/uglifyjs.sh
         shell: bash
       # ...
       - name: "Build & test"
