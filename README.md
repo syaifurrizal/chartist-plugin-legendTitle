@@ -55,3 +55,9 @@ Here the example:
 ```
 
 By default, the colors of box legend will follow colors of Chartist series. 
+
+## LICENSE
+
+For this plugin are licensed under [MIT](https://github.com/syaifurrizal/chartist-plugin-legendTitle/blob/main/LICENSE.md).
+
+For Chartist it self, please refer to Chartist's license here: [go to Chartist's license page](https://github.com/gionkunz/chartist-js/blob/develop/LICENSE-MIT).
